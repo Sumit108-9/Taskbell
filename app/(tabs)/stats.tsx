@@ -9,11 +9,10 @@ import { useTasks } from '@/backend/hooks/useTasks';
 import { Colors, categoryColors } from '@/frontend/constants/Colors';
 import { Typography } from '@/frontend/constants/Typography';
 import { Spacing } from '@/frontend/constants/Spacing';
-import { SectionLabel } from '@/frontend/components/SectionLabel';
 import { isOverdue } from '@/backend/taskHelpers';
 
-const SIZE = 160;
-const STROKE = 16;
+const SIZE = 90;
+const STROKE = 8;
 const R = (SIZE - STROKE) / 2;
 const CIRC = 2 * Math.PI * R;
 
@@ -57,12 +56,12 @@ export default function Stats() {
       style={{ backgroundColor: theme.bg }}
       contentContainerStyle={{ paddingTop: insets.top + 12, paddingBottom: 120, paddingHorizontal: Spacing.screenH }}
     >
-      <Text style={[styles.h1, { color: theme.text }]}>Insights</Text>
+      <Text style={[styles.h1, { color: theme.text }]}>Your Stats</Text>
 
-      <View style={[styles.ringCard, { backgroundColor: theme.card }, Spacing.shadow.card]}>
-        <View style={{ alignItems: 'center' }}>
+      <View style={[styles.ringCard, { backgroundColor: theme.card, borderColor: theme.border }, Spacing.shadow.card]}>
+        <View style={styles.ringWrap}>
           <Svg width={SIZE} height={SIZE}>
-            <Circle cx={SIZE / 2} cy={SIZE / 2} r={R} stroke={theme.inputBg} strokeWidth={STROKE} fill="none" />
+            <Circle cx={SIZE / 2} cy={SIZE / 2} r={R} stroke={theme.border} strokeWidth={STROKE} fill="none" />
             <Circle
               cx={SIZE / 2}
               cy={SIZE / 2}
@@ -78,12 +77,14 @@ export default function Stats() {
           </Svg>
           <View style={styles.ringCenter}>
             <Text style={[styles.pct, { color: theme.text }]}>{pct}%</Text>
-            <Text style={[styles.pctLabel, { color: theme.muted }]}>Productivity</Text>
           </View>
         </View>
-        <Text style={[styles.ringSub, { color: theme.muted }]}>This week · {total} tasks</Text>
-        <View style={styles.trendBadge}>
-          <Text style={styles.trendText}>↑ {Math.max(pct - 5, 0)}% vs last week</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={[styles.ringTitle, { color: theme.text }]}>Productivity</Text>
+          <Text style={[styles.ringSub, { color: theme.muted }]}>This week • {total} tasks</Text>
+          <View style={styles.trendBadge}>
+            <Text style={styles.trendText}>↑ {Math.max(pct - 5, 0)}% vs last week</Text>
+          </View>
         </View>
       </View>
 
@@ -93,8 +94,8 @@ export default function Stats() {
         <SmallStat color={Colors.DANGER_RED} label="Overdue" count={overdue} pct={Math.round((overdue / total) * 100)} />
       </View>
 
-      <View style={[styles.card, { backgroundColor: theme.card }, Spacing.shadow.card]}>
-        <SectionLabel label="This week" />
+      <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }, Spacing.shadow.card]}>
+        <Text style={[styles.cardTitle, { color: theme.text }]}>Weekly Progress</Text>
         <View style={styles.bars}>
           {week.map((d, i) => (
             <BarItem key={i} delay={i * 60} value={weekCounts[i] / maxCount} count={weekCounts[i]} day={format(d, 'EEE')} isToday={isSameDay(d, new Date())} theme={theme} />
@@ -102,8 +103,8 @@ export default function Stats() {
         </View>
       </View>
 
-      <View style={[styles.card, { backgroundColor: theme.card }, Spacing.shadow.card]}>
-        <SectionLabel label="Category breakdown" />
+      <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }, Spacing.shadow.card]}>
+        <Text style={[styles.cardTitle, { color: theme.text }]}>By Category</Text>
         {categories.map((c) => {
           const count = tasks.filter((t) => t.category === c).length;
           const p = total > 0 ? Math.round((count / total) * 100) : 0;
@@ -159,18 +160,22 @@ function BarItem({ delay, value, count, day, isToday, theme }: any) {
 }
 
 const styles = StyleSheet.create({
-  h1: { fontSize: 24, fontFamily: Typography.family.extrabold, marginBottom: 16 },
+  h1: { fontSize: 20, fontFamily: Typography.family.extrabold, marginBottom: 16 },
   ringCard: {
-    borderRadius: Spacing.radius.card,
-    padding: 20,
+    flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 12,
+    gap: 16,
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 16,
+    borderWidth: 1,
   },
+  ringWrap: { width: SIZE, height: SIZE },
   ringCenter: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' },
-  pct: { fontSize: 34, fontFamily: Typography.family.extrabold },
-  pctLabel: { fontSize: 11, fontFamily: Typography.family.semibold, letterSpacing: 1, marginTop: 2 },
-  ringSub: { fontSize: 13, fontFamily: Typography.family.medium, marginTop: 8 },
+  pct: { fontSize: 18, fontFamily: Typography.family.extrabold },
+  ringTitle: { fontSize: 17, fontFamily: Typography.family.extrabold },
+  ringSub: { fontSize: 12.5, fontFamily: Typography.family.medium, marginTop: 4, marginBottom: 10 },
+  cardTitle: { fontSize: 14, fontFamily: Typography.family.bold, marginBottom: 14 },
   trendBadge: {
     backgroundColor: Colors.SUCCESS_GREEN + '22',
     paddingHorizontal: 12,

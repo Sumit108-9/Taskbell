@@ -19,10 +19,9 @@ import { useTasks } from '@/backend/hooks/useTasks';
 import { Colors } from '@/frontend/constants/Colors';
 import { Typography } from '@/frontend/constants/Typography';
 import { Spacing } from '@/frontend/constants/Spacing';
-import { ChevronLeft, ChevronRight } from '@/frontend/components/icons';
+import { Ionicons } from '@expo/vector-icons';
 import { TaskCard } from '@/frontend/components/TaskCard';
 import { EmptyState } from '@/frontend/components/EmptyState';
-import { SectionLabel } from '@/frontend/components/SectionLabel';
 import { tasksOnDate } from '@/backend/taskHelpers';
 
 const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
@@ -53,12 +52,12 @@ export default function CalendarScreen() {
   return (
     <View style={[styles.wrap, { backgroundColor: theme.bg, paddingTop: insets.top + 8 }]}>
       <View style={styles.header}>
-        <Pressable onPress={() => setCursor(addMonths(cursor, -1))} style={styles.navBtn}>
-          <ChevronLeft size={20} color={theme.text} />
+        <Pressable onPress={() => setCursor(addMonths(cursor, -1))} style={[styles.navBtn, { backgroundColor: theme.inputBg }]}>
+          <Ionicons name="chevron-back" size={18} color={theme.muted} />
         </Pressable>
         <Text style={[styles.month, { color: theme.text }]}>{format(cursor, 'MMMM yyyy')}</Text>
-        <Pressable onPress={() => setCursor(addMonths(cursor, 1))} style={styles.navBtn}>
-          <ChevronRight size={20} color={theme.text} />
+        <Pressable onPress={() => setCursor(addMonths(cursor, 1))} style={[styles.navBtn, { backgroundColor: theme.inputBg }]}>
+          <Ionicons name="chevron-forward" size={18} color={theme.muted} />
         </Pressable>
       </View>
 
@@ -113,7 +112,9 @@ export default function CalendarScreen() {
       </View>
 
       <View style={{ paddingHorizontal: Spacing.screenH, marginTop: 16, flex: 1 }}>
-        <SectionLabel label={format(selected, 'MMM d')} count={dayTasks.length} />
+        <Text style={[styles.dayHeader, { color: theme.text }]}>
+          {format(selected, 'MMMM d')} — {dayTasks.length} {dayTasks.length === 1 ? 'Task' : 'Tasks'}
+        </Text>
         <FlatList
           data={dayTasks}
           keyExtractor={(t) => t.id}
@@ -141,7 +142,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.screenH,
     marginBottom: 14,
   },
-  navBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 10 },
+  navBtn: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center', borderRadius: 10 },
+  dayHeader: { fontSize: 14, fontFamily: Typography.family.bold, marginBottom: 12 },
   month: { fontSize: 18, fontFamily: Typography.family.bold },
   weekRow: { flexDirection: 'row', paddingHorizontal: Spacing.screenH, marginBottom: 8 },
   weekday: { flex: 1, textAlign: 'center', fontSize: 11, fontFamily: Typography.family.bold, letterSpacing: 0.5 },

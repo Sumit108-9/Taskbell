@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Pressable, Text, View, StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { Bell } from '@/frontend/components/icons';
 import { Colors } from '@/frontend/constants/Colors';
+import { TaskBellLogo } from '@/frontend/components/TaskBellLogo';
 import { Typography } from '@/frontend/constants/Typography';
 import { Spacing } from '@/frontend/constants/Spacing';
 import { useTheme } from '@/backend/hooks/useTheme';
@@ -38,8 +38,8 @@ export function NotificationBanner({ visible, title, body, onSnooze, onDismiss }
         style,
       ]}
     >
-      <View style={[styles.icon, { backgroundColor: Colors.PRIMARY_BLUE }]}>
-        <Bell size={20} color="#fff" />
+      <View style={styles.iconWrap}>
+        <TaskBellLogo size={40} variant="rounded" badge={false} cornerRadius={12} />
       </View>
       <View style={{ flex: 1 }}>
         <Text style={[styles.title, { color: theme.text }]} numberOfLines={1}>
@@ -74,10 +74,9 @@ const styles = StyleSheet.create({
     gap: 12,
     zIndex: 100,
   },
-  icon: {
+  iconWrap: {
     width: 40,
     height: 40,
-    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -6,14 +6,14 @@ import { useTheme } from '@/backend/hooks/useTheme';
 import { Colors } from '@/frontend/constants/Colors';
 import { Typography } from '@/frontend/constants/Typography';
 import { Spacing } from '@/frontend/constants/Spacing';
-import { Home, CalendarIcon, BarChart, SettingsIcon, Plus } from '@/frontend/components/icons';
+import { Ionicons } from '@expo/vector-icons';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
-const ICONS: Record<string, React.ComponentType<any>> = {
-  home: Home,
-  calendar: CalendarIcon,
-  stats: BarChart,
-  settings: SettingsIcon,
+const ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
+  home: 'home',
+  calendar: 'calendar',
+  stats: 'stats-chart',
+  settings: 'settings-sharp',
 };
 
 const LABELS: Record<string, string> = {
@@ -63,17 +63,17 @@ export function BottomNav({ state, navigation }: BottomTabBarProps) {
                 end={{ x: 1, y: 1 }}
                 style={[styles.fab, Spacing.shadow.fab]}
               >
-                <Plus size={26} color="#fff" strokeWidth={2.5} />
+                <Ionicons name="add" size={28} color="#fff" />
               </LinearGradient>
             </Pressable>
           );
         }
 
-        const Icon = ICONS[route.name];
+        const iconName = ICONS[route.name];
         const color = isFocused ? Colors.PRIMARY_BLUE : theme.muted;
         return (
           <Pressable key={route.key} onPress={onPress} style={styles.tab}>
-            {Icon ? <Icon size={22} color={color} /> : null}
+            {iconName ? <Ionicons name={iconName} size={22} color={color} /> : null}
             <Text style={[styles.label, { color }]}>{LABELS[route.name]}</Text>
           </Pressable>
         );

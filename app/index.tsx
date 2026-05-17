@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { Typography } from '@/frontend/constants/Typography';
 import { getHasOnboarded } from '@/backend/storage';
+import { TaskBellLogo } from '@/frontend/components/TaskBellLogo';
 
 export default function Splash() {
   const d1 = useSharedValue(0.4);
@@ -46,7 +46,7 @@ export default function Splash() {
       <View style={[styles.ring, { bottom: 100, left: 20, width: 90, height: 90, borderColor: 'rgba(255,255,255,0.12)' }]} />
 
       <View style={styles.iconBox}>
-        <Ionicons name="notifications" size={48} color="#fff" />
+        <TaskBellLogo size={62} variant="bare" badge={false} />
       </View>
       <Text style={styles.title}>TaskBell</Text>
       <Text style={styles.tagline}>Plan it. Do it. Never miss it.</Text>
