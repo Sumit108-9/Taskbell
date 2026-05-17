@@ -77,104 +77,180 @@ export default function TaskDetail() {
   const priCol = priorityColors[task.priority];
   const catCol = categoryColors[task.category] ?? Colors.PRIMARY_BLUE;
 
+  const countdownTitle = cd.tone === 'overdue' ? 'OVERDUE' : cd.tone === 'today' ? 'DUE TODAY' : cd.tone === 'upcoming' ? 'DEADLINE' : 'NO DEADLINE';
+  const cdTint = cdColors[cd.tone][0];
+
   return (
     <View style={[styles.wrap, { backgroundColor: theme.bg }]}>
-      <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-        <Pressable onPress={() => router.back()} style={styles.iconBtn}>
-          <ChevronLeft size={24} color={theme.text} />
-        </Pressable>
-        <Text style={[styles.headerTitle, { color: theme.text }]}>Task Details</Text>
-        <Pressable style={styles.iconBtn}>
-          <Edit size={20} color={theme.text} />
+      {/* Header */}
+      <View style={[styles.header, { paddingTop: insets.top + 8, borderBottomColor: theme.border }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Pressable onPress={() => router.back()} style={[styles.iconBtn, { backgroundColor: theme.inputBg }]}>
+            <Ionicons name="chevron-back" size={20} color={theme.muted} />
+          </Pressable>
+          <Text style={[styles.headerTitle, { color: theme.text }]}>Task Details</Text>
+        </View>
+        <Pressable style={[styles.iconBtn, { backgroundColor: theme.inputBg }]}>
+          <Ionicons name="create-outline" size={18} color={Colors.PRIMARY_BLUE} />
         </Pressable>
       </View>
 
       <ScrollView contentContainerStyle={{ padding: Spacing.screenH, paddingBottom: 120 }}>
+        {/* Priority badge + category */}
         <View style={styles.metaRow}>
           <View style={[styles.priBadge, { backgroundColor: priBg }]}>
-            <Text style={[styles.priText, { color: priCol }]}>{task.priority} Priority</Text>
+            <Text style={[styles.priText, { color: priCol }]}>● {task.priority} Priority</Text>
           </View>
-          <View style={[styles.catChip, { backgroundColor: catCol + '22' }]}>
+          <View style={[styles.catChip, { backgroundColor: catCol + '18' }]}>
             <Text style={[styles.catText, { color: catCol }]}>{task.category}</Text>
           </View>
         </View>
 
         <Text style={[styles.title, { color: theme.text }]}>{task.title}</Text>
-        {task.description ? <Text style={[styles.desc, { color: theme.muted }]}>{task.description}</Text> : null}
+        {task.description ? (
+          <Text style={[styles.desc, { color: theme.muted }]}>{task.description}</Text>
+        ) : null}
 
-        <LinearGradient
-          colors={cdColors[cd.tone]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.countdown}
+        {/* Countdown card */}
+        <View
+          style={[
+            styles.countdown,
+            { backgroundColor: cdTint + '18', borderColor: cdTint + '30' },
+          ]}
         >
-          <Text style={styles.cdLabel}>{cd.tone === 'overdue' ? 'OVERDUE' : cd.tone === 'today' ? 'DUE TODAY' : 'UPCOMING'}</Text>
-          <Text style={styles.cdValue}>{cd.label}</Text>
-        </LinearGradient>
+          <View style={[styles.cdIcon, { backgroundColor: cdTint + '20' }]}>
+            <Ionicons name="alarm-outline" size={20} color={cdTint} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.cdLabel, { color: theme.muted }]}>{countdownTitle}</Text>
+            <Text style={[styles.cdValue, { color: cdTint }]}>{cd.label}</Text>
+          </View>
+        </View>
 
+        {/* Info grid 2x2 */}
         <View style={styles.infoGrid}>
-          <InfoCell label="Date" value={task.dueDate ? format(parseISO(task.dueDate), 'MMM d, yyyy') : '—'} />
-          <InfoCell label="Time" value={task.dueTime ? formatTime(task.dueTime) : '—'} />
-          <InfoCell label="Reminder" value={task.reminderMinutes != null ? `${task.reminderMinutes} min before` : 'None'} />
-          <InfoCell label="Repeat" value={REPEAT_LABEL[task.repeat] || 'Never'} />
+          <InfoCell
+            icon="calendar-outline"
+            label="Date"
+            value={task.dueDate ? format(parseISO(task.dueDate), 'MMM d, yyyy') : '—'}
+          />
+          <InfoCell
+            icon="time-outline"
+            label="Time"
+            value={task.dueTime ? formatTime(task.dueTime) : '—'}
+          />
+          <InfoCell
+            icon="notifications-outline"
+            label="Reminder"
+            value={task.reminderMinutes != null ? `${task.reminderMinutes} min before` : 'None'}
+          />
+          <InfoCell icon="repeat" label="Repeat" value={REPEAT_LABEL[task.repeat] || 'Never'} />
         </View>
 
-        <SectionLabel label="Subtasks" count={task.subtasks.length} right={
-          <Text style={{ color: theme.muted, fontFamily: Typography.family.semibold, fontSize: 12 }}>
-            {doneSubs}/{task.subtasks.length}
+        {/* Subtasks */}
+        <View style={{ marginBottom: 20 }}>
+          <Text style={[styles.subtaskHeader, { color: theme.text }]}>
+            Subtasks ({doneSubs}/{task.subtasks.length})
           </Text>
-        } />
-        <View style={[styles.progressTrack, { backgroundColor: theme.inputBg }]}>
-          <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
-        </View>
-        <View style={{ marginTop: 8 }}>
+          <View style={[styles.progressTrack, { backgroundColor: theme.border }]}>
+            <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
+          </View>
           {task.subtasks.map((s) => (
-            <SubtaskItem key={s.id} subtask={s} onToggle={() => toggleSub(s.id)} />
+            <Pressable
+              key={s.id}
+              onPress={() => toggleSub(s.id)}
+              style={[styles.subtaskRow, { borderBottomColor: theme.border }]}
+            >
+              <View
+                style={[
+                  styles.subtaskCheck,
+                  {
+                    borderColor: s.done ? Colors.SUCCESS_GREEN : theme.border,
+                    backgroundColor: s.done ? Colors.SUCCESS_GREEN : 'transparent',
+                  },
+                ]}
+              >
+                {s.done ? <Ionicons name="checkmark" size={11} color="#fff" /> : null}
+              </View>
+              <Text
+                style={[
+                  styles.subtaskText,
+                  {
+                    color: s.done ? theme.muted : theme.text,
+                    textDecorationLine: s.done ? 'line-through' : 'none',
+                  },
+                ]}
+              >
+                {s.text}
+              </Text>
+            </Pressable>
           ))}
-          <View style={[styles.addSubRow, { backgroundColor: theme.inputBg }]}>
+          <View style={[styles.addSubRow, { borderBottomColor: theme.border }]}>
+            <Ionicons name="add" size={18} color={theme.muted} />
             <TextInput
               value={newSubtask}
               onChangeText={setNewSubtask}
               onSubmitEditing={addSubtask}
-              placeholder="+ Add subtask"
+              placeholder="Add subtask"
               placeholderTextColor={theme.muted}
               style={[styles.addSubInput, { color: theme.text }]}
             />
           </View>
         </View>
 
-        <Pressable onPress={() => toggleComplete(task.id)} style={{ marginTop: 24 }}>
+        {/* Mark as Done */}
+        <Pressable onPress={() => toggleComplete(task.id)} style={{ marginBottom: 10 }}>
           <LinearGradient
-            colors={task.isCompleted ? ['#64748B', '#475569'] : ['#16A34A', '#22C55E']}
+            colors={task.isCompleted ? ['#64748B', '#475569'] : ['#22C55E', '#16A34A']}
             start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={styles.actionBtn}
           >
-            <Text style={styles.actionText}>{task.isCompleted ? 'Mark as Pending' : 'Mark as Done'}</Text>
+            <Ionicons name="checkmark" size={18} color="#fff" />
+            <Text style={styles.actionText}>
+              {task.isCompleted ? 'Mark as Pending' : 'Mark as Done'}
+            </Text>
           </LinearGradient>
         </Pressable>
 
-        <Pressable
-          style={[styles.outlineBtn, { borderColor: Colors.PRIMARY_BLUE }]}
-          onPress={() => Alert.alert('Edit Task', 'Edit flow coming soon.')}
-        >
-          <Text style={[styles.outlineText, { color: Colors.PRIMARY_BLUE }]}>Edit Task</Text>
-        </Pressable>
-
-        <Pressable onPress={handleDelete} style={[styles.outlineBtn, { borderColor: Colors.DANGER_RED }]}>
-          <Trash size={16} color={Colors.DANGER_RED} />
-          <Text style={[styles.outlineText, { color: Colors.DANGER_RED, marginLeft: 8 }]}>Delete Task</Text>
-        </Pressable>
+        {/* Edit + Delete row */}
+        <View style={styles.actionRow}>
+          <Pressable
+            style={[styles.outlineBtn, { borderColor: Colors.PRIMARY_BLUE }]}
+            onPress={() => Alert.alert('Edit Task', 'Edit flow coming soon.')}
+          >
+            <Ionicons name="create-outline" size={15} color={Colors.PRIMARY_BLUE} />
+            <Text style={[styles.outlineText, { color: Colors.PRIMARY_BLUE }]}>Edit Task</Text>
+          </Pressable>
+          <Pressable
+            onPress={handleDelete}
+            style={[styles.outlineBtn, { borderColor: Colors.DANGER_RED }]}
+          >
+            <Ionicons name="trash-outline" size={15} color={Colors.DANGER_RED} />
+            <Text style={[styles.outlineText, { color: Colors.DANGER_RED }]}>Delete</Text>
+          </Pressable>
+        </View>
       </ScrollView>
     </View>
   );
 }
 
-function InfoCell({ label, value }: { label: string; value: string }) {
+function InfoCell({
+  icon,
+  label,
+  value,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  value: string;
+}) {
   const { theme } = useTheme();
   return (
-    <View style={[styles.infoCell, { backgroundColor: theme.card }, Spacing.shadow.card]}>
-      <Text style={[styles.infoLabel, { color: theme.muted }]}>{label.toUpperCase()}</Text>
+    <View style={[styles.infoCell, { backgroundColor: theme.inputBg }]}>
+      <View style={styles.infoIconRow}>
+        <Ionicons name={icon} size={13} color={Colors.PRIMARY_BLUE} />
+        <Text style={[styles.infoLabel, { color: theme.muted }]}>{label}</Text>
+      </View>
       <Text style={[styles.infoValue, { color: theme.text }]}>{value}</Text>
     </View>
   );
