@@ -1,31 +1,25 @@
-Copy-paste this directly into your `README.md` file:
+# 🔔 TaskBell — Plan it. Do it. Never miss it.
 
-````markdown
-# 🔔 TaskBell
-
-**TaskBell** is a modern personal **Todo & Reminder App** built with **React Native + Expo**.  
-It helps users manage daily tasks, deadlines, reminders, categories, productivity stats, and more — all in a clean mobile-first interface.
+TaskBell is a beautiful, minimal personal todo and reminder app 
+built with React Native and Expo. Designed for people who want a 
+clean, distraction-free way to stay organized and on top of their 
+deadlines.
 
 ---
 
 ## ✨ Features
 
-- ✅ Create, edit, delete, and complete tasks
-- 📂 Organize tasks with categories
-- 🚩 Set task priority levels
-- ⏰ Add deadlines, reminders, and repeat schedules
-- 🔔 Local push/alarm notifications using `expo-notifications`
-- 📅 Calendar view with per-day task list
-- 📊 Productivity stats with:
-  - Ring chart
-  - Weekly progress bars
-  - Category breakdown
-- 🌙 Light mode / Dark mode support
-- 🎨 Theme accent color picker
-- 🧩 Subtasks with progress tracking
-- 💾 Local-first storage using AsyncStorage
-- 📤 Backup/export support through system share sheet
-- ⚡ Smooth animations using `react-native-reanimated`
+- 📋 **Task Management** — Add tasks with title, description, category, and priority
+- 🎯 **Priority Levels** — High, Medium, and Low with color-coded indicators
+- ⏰ **Deadline Tracking** — Set due dates and times for every task
+- 🔔 **Smart Reminders** — Get notified 5, 15, 30 min or 1 hr before deadline
+- 🚨 **Alarm Notifications** — Powerful alerts that fire right on time
+- 📅 **Calendar View** — See all tasks organized by date
+- 📊 **Productivity Stats** — Track completed, pending, and overdue tasks
+- 🔁 **Repeating Tasks** — Set tasks to repeat daily, weekly, or monthly
+- ✅ **Subtasks** — Break big tasks into smaller steps
+- 🌙 **Dark Mode** — Full light and dark theme support
+- 💾 **Local Storage** — All data saved on your device with AsyncStorage
 
 ---
 
@@ -33,198 +27,67 @@ It helps users manage daily tasks, deadlines, reminders, categories, productivit
 
 | Technology | Purpose |
 |---|---|
-| **Expo SDK 51** | React Native app framework |
-| **TypeScript** | Type-safe development |
-| **expo-router** | File-based navigation |
-| **AsyncStorage** | Local data persistence |
-| **expo-notifications** | Reminder and alarm notifications |
-| **expo-linear-gradient** | Beautiful gradient UI |
-| **expo-google-fonts** | Custom fonts |
-| **react-native-reanimated** | Smooth animations |
-| **react-native-svg** | Charts and vector graphics |
-| **react-native-safe-area-context** | Safe screen layout |
-| **date-fns** | Date and time formatting |
+| React Native | Mobile UI framework |
+| Expo SDK 51 | Development platform |
+| expo-router | File-based navigation |
+| AsyncStorage | Local data persistence |
+| expo-notifications | Push & alarm notifications |
+| react-native-reanimated | Smooth animations |
+| react-native-svg | Charts and icons |
+| date-fns | Date formatting |
+| TypeScript | Type safety |
 
 ---
 
-## 🚀 Quick Start
+## 📱 Screens
 
-### 1. Clone the repository
+- Splash Screen
+- Onboarding (3 slides)
+- Home — Task list with filters and stats
+- Add Task — Full task creation form
+- Task Detail — Full view with subtasks and countdown
+- Calendar — Monthly view with task dots
+- Stats — Weekly progress and productivity chart
+- Settings — Notifications, dark mode, theme, backup
+
+---
+
+## 🎨 Design
+
+- Primary Color: `#2563EB` (Blue)
+- Font: DM Sans (500, 600, 700, 800)
+- Card radius: 16px
+- Supports Light & Dark mode
+- Clean, minimal mobile-first UI
+
+---
+
+## 🚀 Getting Started
 
 ```bash
-git clone https://github.com/Sumit108-9/Taskbell.git
-cd Taskbell
-````
+# Clone the repo
+git clone https://github.com/yourusername/taskbell.git
 
-### 2. Install dependencies
-
-```bash
+# Install dependencies
+cd taskbell
 npm install
-```
 
-### 3. Start the Expo development server
-
-```bash
+# Start the app
 npx expo start
 ```
 
-### 4. Run the app
+---
 
-After the Expo server starts:
+## 📦 Download
 
-```text
-Press a → Run on Android Emulator
-Press i → Run on iOS Simulator
-Press w → Run on Web
-```
-
-Or scan the QR code using the **Expo Go** app on your phone.
-
-> **Note:** Push notifications require a physical device or a development build. They may not work properly on web.
+Coming soon on Google Play Store and Apple App Store.
 
 ---
 
-## 📁 Project Structure
+## 📄 License
 
-The project is divided into a clean **frontend** and **backend logic** structure.
-
-```text
-TaskBell/
-│
-├── app/                         # Expo Router screens
-│   ├── _layout.tsx              # Root layout, fonts, providers, error boundary
-│   ├── index.tsx                # Splash screen
-│   ├── onboarding.tsx           # 3-slide onboarding screen
-│   │
-│   ├── (tabs)/                  # Bottom tab navigation
-│   │   ├── _layout.tsx
-│   │   ├── home.tsx
-│   │   ├── calendar.tsx
-│   │   ├── add.tsx
-│   │   ├── stats.tsx
-│   │   └── settings.tsx
-│   │
-│   └── task/
-│       └── [id].tsx             # Task detail screen
-│
-├── frontend/                    # UI layer
-│   ├── components/              # Reusable components
-│   │   ├── TaskCard.tsx
-│   │   ├── FilterChips.tsx
-│   │   └── ...
-│   │
-│   └── constants/               # Design system
-│       ├── Colors.ts
-│       ├── Typography.ts
-│       └── Spacing.ts
-│
-├── backend/                     # Data and business logic
-│   ├── types/                   # TypeScript models
-│   │   ├── Task.ts
-│   │   ├── Subtask.ts
-│   │   └── AppSettings.ts
-│   │
-│   ├── hooks/                   # Custom hooks
-│   │   ├── useTasks.ts
-│   │   ├── useSettings.ts
-│   │   ├── useTheme.ts
-│   │   └── useNotifications.ts
-│   │
-│   ├── context/
-│   │   └── AppProviders.tsx     # Global app providers
-│   │
-│   ├── storage.ts               # AsyncStorage helpers
-│   ├── notifications.ts         # Notification scheduling/canceling
-│   ├── taskHelpers.ts           # Task filters and formatters
-│   └── uuid.ts                  # ID generator
-│
-├── assets/                      # App icons, splash images, fonts
-├── app.json                     # Expo app configuration
-├── package.json                 # Project scripts and dependencies
-├── tsconfig.json                # TypeScript configuration
-└── README.md
-```
+MIT License — feel free to use and modify.
 
 ---
 
-## 🔗 Path Aliases
-
-The project uses path aliases from `tsconfig.json`.
-
-```ts
-@/backend/...
-@/frontend/components/...
-@/frontend/constants/...
-```
-
-Example:
-
-```ts
-import { TaskCard } from "@/frontend/components/TaskCard";
-import { useTasks } from "@/backend/hooks/useTasks";
-```
-
----
-
-## 📌 Important Notes
-
-* Add app icons and splash images inside the `assets/` folder before creating a production build.
-* Notification permission is requested when the app launches or when notifications are enabled from Settings.
-* The `app/` directory must stay at the root because `expo-router` uses it to detect screens.
-* The file `taskbell-ui.jsx` is only a web prototype and is not used in the Expo app.
-* Data is stored locally using AsyncStorage, so no external database is required for the basic version.
-
----
-
-## 📜 Available Scripts
-
-| Command           | Description                    |
-| ----------------- | ------------------------------ |
-| `npm start`       | Start Expo development server  |
-| `npm run android` | Run on Android emulator/device |
-| `npm run ios`     | Run on iOS simulator           |
-| `npm run web`     | Run on browser                 |
-
----
-
-## 📱 App Screens
-
-TaskBell includes the following main screens:
-
-* Splash Screen
-* Onboarding Screen
-* Home / Today Tasks
-* Calendar View
-* Add Task
-* Task Details
-* Productivity Stats
-* Settings
-
----
-
-## 🧠 Future Improvements
-
-* Cloud backup and sync
-* User login system
-* Firebase integration
-* Advanced recurring reminders
-* Widget support
-* Voice task input
-* Smart AI task suggestions
-
----
-
-## 👨‍💻 Author
-
-Developed by **Sumit Kamat**
-
-GitHub: [Sumit108-9](https://github.com/Sumit108-9)
-
----
-
-## ⭐ Support
-
-If you like this project, give it a ⭐ on GitHub.
-
-```
-```
+> Built with ❤️ using React Native + Expo
